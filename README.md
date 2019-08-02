@@ -25,12 +25,9 @@ Add the event subscriber to your entity manager's event manager. Assuming `$em` 
 ```php
 <?php
 
-//You should pick your own hexadecimal secret
-$secret = ["public" => "publicKeyRsa2048Generated", "private" => "privateKeyRsa2048Generated"];
-
 $subscriber = new DoctrineEncryptSubscriber(
     new \Doctrine\Common\Annotations\AnnotationReader,
-    new \DoctrineEncrypt\Encryptors\OpenSslEncryptor($secret)
+    new \DoctrineEncrypt\Encryptors\OpenSslEncryptor("contentPrivateKeyRSA2048Generated", "contentPublicKey2048Generated", "passwordKeyRsa")
 );
 
 $eventManager = $em->getEventManager();
