@@ -14,12 +14,12 @@ interface EncryptorInterface
      * @param string $data
      * @return string
      */
-    public function encrypt($data);
+    public function encrypt(string $data): string;
 
     /**
      * Must accept data and return decrypted data
      * @param string $data
      * @return string
      */
-    public function decrypt($data);
+    public function decrypt(string $data): string;
 }

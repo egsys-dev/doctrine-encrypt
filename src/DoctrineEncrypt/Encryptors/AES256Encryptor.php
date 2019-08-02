@@ -29,7 +29,7 @@ class AES256Encryptor implements EncryptorInterface
      * @param string $data
      * @return string
      */
-    public function encrypt($data)
+    public function encrypt(string $data): string
     {
         if (is_null($data)) {
             return $data;
@@ -53,7 +53,7 @@ class AES256Encryptor implements EncryptorInterface
      * @param string $data
      * @return string
      */
-    public function decrypt($data)
+    public function decrypt(string $data): string
     {
         if (is_null($data)) {
             return $data;
