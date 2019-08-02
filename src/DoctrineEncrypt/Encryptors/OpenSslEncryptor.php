@@ -51,11 +51,11 @@ class OpenSslEncryptor implements EncryptorInterface
         return base64_encode($encrypted);
     }
 
-    public function decrypt(string $encrypted): string
+    public function decrypt(string $data): string
     {
         $decrypted = "";
         $part_len = $this->key_len / self::MIN_PART_LENGHT;
-        $base64_decoded = base64_decode($encrypted);
+        $base64_decoded = base64_decode($data);
         $parts = str_split($base64_decoded, $part_len);
         $privateKey = openssl_get_privatekey($this->privateKey,$this->passPhrase);
 
