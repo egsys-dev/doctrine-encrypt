@@ -37,7 +37,7 @@ class OpenSSLCryptor implements EncryptorInterface
 
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
-        $this->iv = base64_decode($iv);
+        $this->iv = $iv;
         $this->cipher = $cipher;
         $this->hmacHash = $hmacHash;
     }
