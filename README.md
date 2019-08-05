@@ -1,5 +1,9 @@
 # DoctrineEncrypt
-[![Build Status](https://travis-ci.org/nepda/doctrine-encrypt.svg?branch=master)](https://travis-ci.org/nepda/doctrine-encrypt)
+
+## Este repositório foi baseado em:
+
+https://github.com/nepda/doctrine-encrypt
+
 
 Package encrypts and decrypts Doctrine fields through life cycle events. This version of the Doctrine Encrypt package
 distinguishes itself with the following features:
@@ -15,7 +19,7 @@ Tests currently run with PHP 7.1, 7.2
 ## Installation
 Execute follow command:
 ```
-composer require lucascardoso-egsys/doctrine-encrypt
+composer require egsys-dev/doctrine-encrypt
 ```
 
 
@@ -27,7 +31,7 @@ Add the event subscriber to your entity manager's event manager. Assuming `$em` 
 
 $subscriber = new DoctrineEncryptSubscriber(
     new \Doctrine\Common\Annotations\AnnotationReader,
-    new \DoctrineEncrypt\Encryptors\OpenSslEncryptor("contentPrivateKeyRSA2048Generated", "contentPublicKey2048Generated", "passwordKeyRsa")
+    new \DoctrineEncrypt\Encryptors\OpenSslEncryptor("contentPrivateKeyRSA2048Generated", "contentPublicKey2048Generated", "passwordKeyRsa", "ivBase64")
 );
 
 $eventManager = $em->getEventManager();
