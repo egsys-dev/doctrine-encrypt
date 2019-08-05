@@ -12,31 +12,41 @@ use DoctrineEncrypt\Exception\InvalidCipherException;
  */
 class OpenSSLCryptor implements EncryptorInterface
 {
-    const CIPHER_ALGORITM = 'aes-256-cbc';
-    const HMAC_ALGORITM = 'sha256';
+    const CIPHER_AES_256_CBC = 'aes-256-cbc';
+    const HMAC_SHA256 = 'sha256';
 
     private $privateKey;
     private $publicKey;
     private $iv;
+    private $cipher;
+    private $hmacHash;
 
-    public function __construct(string $privateKey, string $publicKey, string $iv)
+    public function __construct(
+        string $privateKey,
+        string $publicKey,
+        string $iv,
+        string $cipher = self::CIPHER_AES_256_CBC,
+        string $hmacHash = self::HMAC_SHA256
+    )
     {
         $method = array_flip(openssl_get_cipher_methods());
 
-        if (!isset($method[self::CIPHER_ALGORITM])) {
+        if (!isset($method[$cipher])) {
             throw new InvalidCipherException('O algoritmo informado para a criptografia é inválido.');
         }
 
         $this->privateKey = $privateKey;
         $this->publicKey = $publicKey;
         $this->iv = base64_decode($iv);
+        $this->cipher = $cipher;
+        $this->hmacHash = $hmacHash;
     }
 
     public function encrypt(string $data): string
     {
-        $ciphertext_raw = openssl_encrypt($data, self::CIPHER_ALGORITM, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
-        $hmac = hash_hmac(self::HMAC_ALGORITM, $ciphertext_raw, $this->publicKey, true);
-        $encrypted = base64_encode($this->iv.$hmac.$ciphertext_raw);
+        $ciphertextRaw = openssl_encrypt($data, $this->cipher, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
+        $hmac = hash_hmac($this->hmacHash, $ciphertextRaw, $this->publicKey, true);
+        $encrypted = base64_encode($this->iv.$hmac.$ciphertextRaw);
 
         return $encrypted;
     }
@@ -44,17 +54,17 @@ class OpenSSLCryptor implements EncryptorInterface
     public function decrypt(string $data): string
     {
         $c = base64_decode($data);
-        $ivlen = openssl_cipher_iv_length(self::CIPHER_ALGORITM);
+        $ivlen = openssl_cipher_iv_length($this->cipher);
         $hmac = substr($c, $ivlen, $sha2len = 32);
-        $ciphertext_raw = substr($c, $ivlen + $sha2len);
+        $ciphertextRaw = substr($c, $ivlen + $sha2len);
 
-        $original_plaintext = openssl_decrypt($ciphertext_raw, self::CIPHER_ALGORITM, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
-        $calcmac = hash_hmac(self::HMAC_ALGORITM, $ciphertext_raw, $this->publicKey, true);
+        $originalPlaintext = openssl_decrypt($ciphertextRaw, $this->cipher, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
+        $calcmac = hash_hmac($this->hmacHash, $ciphertextRaw, $this->publicKey, true);
 
         if (!hash_equals($hmac, $calcmac)) {
             throw new HmacCalculationException('Não foi possivel descriptografar o valor informado');
         }
 
-        return $original_plaintext;
+        return $originalPlaintext;
     }
 }

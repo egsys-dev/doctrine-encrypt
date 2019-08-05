@@ -2,6 +2,8 @@
 namespace DoctrineEncrypt\Tests\Encryptors;
 
 use DoctrineEncrypt\Encryptors\OpenSSLCryptor;
+use DoctrineEncrypt\Exception\HmacCalculationException;
+use DoctrineEncrypt\Exception\InvalidCipherException;
 use PHPUnit\Framework\TestCase;
 
 class OpenSSLCryptorTest extends TestCase
@@ -24,5 +26,11 @@ class OpenSSLCryptorTest extends TestCase
 
         $this->assertNotEquals('test-data', $cipherText);
         $this->assertEquals('test-data', $cryptor->decrypt($cipherText));
+    }
+
+    public function testOpenSSLWithInvalidMethodThrowsException()
+    {
+        $this->expectException(InvalidCipherException::class);
+        $cryptor = new OpenSSLCryptor($this->privateKey, $this->publicKey, $this->iv, "foobar");
     }
 }
