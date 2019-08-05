@@ -18,10 +18,12 @@ use PHPUnit\Framework\TestCase;
 /**
  * Base test case contains common mock objects
  * and functionality among all extensions using
- * ORM object manager
+ * ORM object manager.
  *
  * @author Gediminas Morkevicius <gediminas.morkevicius@gmail.com>
- * @link http://www.gediminasm.org
+ *
+ * @see http://www.gediminasm.org
+ *
  * @license MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 abstract class BaseTestCaseORM extends TestCase
@@ -41,17 +43,18 @@ abstract class BaseTestCaseORM extends TestCase
      */
     protected function setUp()
     {
-
     }
 
     /**
      * EntityManager mock object together with
      * annotation mapping driver and pdo_sqlite
-     * database in memory
+     * database in memory.
      *
-     * @param EventManager $evm
+     * @param EventManager  $evm
      * @param Configuration $config
+     *
      * @return EntityManager
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\Tools\ToolsException
      */
@@ -67,7 +70,7 @@ abstract class BaseTestCaseORM extends TestCase
 
         $schema = array_map(function ($class) use ($em) {
             return $em->getClassMetadata($class);
-        }, (array)$this->getUsedEntityFixtures());
+        }, (array) $this->getUsedEntityFixtures());
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array());
@@ -79,10 +82,11 @@ abstract class BaseTestCaseORM extends TestCase
     /**
      * EntityManager mock object together with
      * annotation mapping driver and custom
-     * connection
+     * connection.
      *
-     * @param array $conn
+     * @param array        $conn
      * @param EventManager $evm
+     *
      * @return EntityManager
      */
     protected function getMockCustomEntityManager(array $conn, EventManager $evm = null)
@@ -92,7 +96,7 @@ abstract class BaseTestCaseORM extends TestCase
 
         $schema = array_map(function ($class) use ($em) {
             return $em->getClassMetadata($class);
-        }, (array)$this->getUsedEntityFixtures());
+        }, (array) $this->getUsedEntityFixtures());
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(array());
@@ -103,9 +107,10 @@ abstract class BaseTestCaseORM extends TestCase
 
     /**
      * EntityManager mock object with
-     * annotation mapping driver
+     * annotation mapping driver.
      *
      * @param EventManager $evm
+     *
      * @return EntityManager
      */
     protected function getMockMappedEntityManager(EventManager $evm = null)
@@ -127,7 +132,7 @@ abstract class BaseTestCaseORM extends TestCase
     }
 
     /**
-     * Starts query statistic log
+     * Starts query statistic log.
      *
      * @throws \RuntimeException
      */
@@ -146,10 +151,11 @@ abstract class BaseTestCaseORM extends TestCase
 
     /**
      * Stops query statistic log and outputs
-     * the data to screen or file
+     * the data to screen or file.
      *
-     * @param boolean $dumpOnlySql
-     * @param boolean $writeToLog
+     * @param bool $dumpOnlySql
+     * @param bool $writeToLog
+     *
      * @throws \RuntimeException
      */
     protected function stopQueryLog($dumpOnlySql = false, $writeToLog = false)
@@ -157,8 +163,8 @@ abstract class BaseTestCaseORM extends TestCase
         if ($this->queryAnalyzer) {
             $output = $this->queryAnalyzer->getOutput($dumpOnlySql);
             if ($writeToLog) {
-                $fileName = __DIR__ . '/../../temp/query_debug_' . time() . '.log';
-                if (($file = fopen($fileName, 'w+')) !== false) {
+                $fileName = __DIR__.'/../../temp/query_debug_'.time().'.log';
+                if (false !== ($file = fopen($fileName, 'w+'))) {
                     fwrite($file, $output);
                     fclose($file);
                 } else {
@@ -171,7 +177,7 @@ abstract class BaseTestCaseORM extends TestCase
     }
 
     /**
-     * Creates default mapping driver
+     * Creates default mapping driver.
      *
      * @return \Doctrine\ORM\Mapping\Driver\AnnotationDriver
      */
@@ -179,35 +185,37 @@ abstract class BaseTestCaseORM extends TestCase
     {
         $reader = new AnnotationReader();
         $reader = new CachedReader($reader, new ArrayCache());
+
         return new AnnotationDriver($reader);
     }
 
     /**
-     * Get a list of used fixture classes
+     * Get a list of used fixture classes.
      *
      * @return array
      */
     abstract protected function getUsedEntityFixtures();
 
     /**
-     * Build event manager
+     * Build event manager.
      *
      * @return EventManager
      */
     private function getEventManager()
     {
-        $evm = new EventManager;
-        $evm->addEventSubscriber(new TreeListener);
-        $evm->addEventSubscriber(new SluggableListener);
-        $evm->addEventSubscriber(new LoggableListener);
-        $evm->addEventSubscriber(new TranslatableListener);
-        $evm->addEventSubscriber(new TimestampableListener);
-        $evm->addEventSubscriber(new SoftDeleteableListener);
+        $evm = new EventManager();
+        $evm->addEventSubscriber(new TreeListener());
+        $evm->addEventSubscriber(new SluggableListener());
+        $evm->addEventSubscriber(new LoggableListener());
+        $evm->addEventSubscriber(new TranslatableListener());
+        $evm->addEventSubscriber(new TimestampableListener());
+        $evm->addEventSubscriber(new SoftDeleteableListener());
+
         return $evm;
     }
 
     /**
-     * Get annotation mapping configuration
+     * Get annotation mapping configuration.
      *
      * @return \Doctrine\ORM\Configuration
      */
@@ -222,7 +230,7 @@ abstract class BaseTestCaseORM extends TestCase
         $mockMethods = array();
 
         foreach ($methods as $method) {
-            if ($method->name !== 'addFilter' && $method->name !== 'getFilterClassName') {
+            if ('addFilter' !== $method->name && 'getFilterClassName' !== $method->name) {
                 $mockMethods[] = $method->name;
             }
         }
@@ -234,7 +242,7 @@ abstract class BaseTestCaseORM extends TestCase
         $config
             ->expects($this->once())
             ->method('getProxyDir')
-            ->will($this->returnValue(__DIR__ . '/../../temp'));
+            ->will($this->returnValue(__DIR__.'/../../temp'));
 
         $config
             ->expects($this->once())
@@ -266,17 +274,18 @@ abstract class BaseTestCaseORM extends TestCase
         $config
             ->expects($this->any())
             ->method('getQuoteStrategy')
-            ->will($this->returnValue(new DefaultQuoteStrategy));
+            ->will($this->returnValue(new DefaultQuoteStrategy()));
 
         $config
             ->expects($this->any())
             ->method('getNamingStrategy')
-            ->will($this->returnValue(new DefaultNamingStrategy));
+            ->will($this->returnValue(new DefaultNamingStrategy()));
 
         $config
             ->expects($this->once())
             ->method('getRepositoryFactory')
-            ->will($this->returnValue(new DefaultRepositoryFactory));
+            ->will($this->returnValue(new DefaultRepositoryFactory()));
+
         return $config;
     }
 }

@@ -21,6 +21,7 @@ class User
 
     /**
      * @ORM\Column(name="username", type="string", length=64)
+     *
      * @var string
      */
     protected $username;
@@ -28,6 +29,7 @@ class User
     /**
      * @ORM\Column(name="password", type="string", length=64)
      * @Encrypted
+     *
      * @var string
      */
     protected $password;

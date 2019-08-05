@@ -76,7 +76,7 @@ class DoctrineEncryptSubscriberTest extends BaseTestCaseORM
     }
 
     /**
-     * Get a list of used fixture classes
+     * Get a list of used fixture classes.
      *
      * @return array
      */

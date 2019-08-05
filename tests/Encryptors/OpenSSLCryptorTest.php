@@ -1,8 +1,8 @@
 <?php
+
 namespace DoctrineEncrypt\Tests\Encryptors;
 
 use DoctrineEncrypt\Encryptors\OpenSSLCryptor;
-use DoctrineEncrypt\Exception\HmacCalculationException;
 use DoctrineEncrypt\Exception\InvalidCipherException;
 use PHPUnit\Framework\TestCase;
 
@@ -14,9 +14,9 @@ class OpenSSLCryptorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->publicKey = "foo";
-        $this->privateKey = "bar";
-        $this->iv = "dTN6Lid8NjVESTdYLVwtVw==";
+        $this->publicKey = 'foo';
+        $this->privateKey = 'bar';
+        $this->iv = 'dTN6Lid8NjVESTdYLVwtVw==';
     }
 
     public function testEncryptReturnsDecryptableValueWithSameIv()
@@ -31,6 +31,6 @@ class OpenSSLCryptorTest extends TestCase
     public function testOpenSSLWithInvalidMethodThrowsException()
     {
         $this->expectException(InvalidCipherException::class);
-        $cryptor = new OpenSSLCryptor($this->privateKey, $this->publicKey, $this->iv, "foobar");
+        $cryptor = new OpenSSLCryptor($this->privateKey, $this->publicKey, $this->iv, 'foobar');
     }
 }

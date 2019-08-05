@@ -27,8 +27,7 @@ class OpenSSLCryptor implements EncryptorInterface
         string $iv,
         string $cipher = self::CIPHER_AES_256_CBC,
         string $hmacHash = self::HMAC_SHA256
-    )
-    {
+    ) {
         $method = array_flip(openssl_get_cipher_methods());
 
         if (!isset($method[$cipher])) {
