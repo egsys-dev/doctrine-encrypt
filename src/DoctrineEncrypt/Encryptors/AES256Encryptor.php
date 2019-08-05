@@ -3,20 +3,22 @@
 namespace DoctrineEncrypt\Encryptors;
 
 /**
- * Class for AES256 encryption
+ * Class for AES256 encryption.
  *
  * @author Victor Melnik <melnikvictorl@gmail.com>
  */
 class AES256Encryptor implements EncryptorInterface
 {
     /**
-     * Secret key for aes algorythm
+     * Secret key for aes algorythm.
+     *
      * @var string
      */
     private $secretKey;
 
     /**
-     * Initialization of encryptor
+     * Initialization of encryptor.
+     *
      * @param string $key
      */
     public function __construct($key)
@@ -25,8 +27,10 @@ class AES256Encryptor implements EncryptorInterface
     }
 
     /**
-     * Implementation of EncryptorInterface encrypt method
+     * Implementation of EncryptorInterface encrypt method.
+     *
      * @param string $data
+     *
      * @return string
      */
     public function encrypt(string $data): string
@@ -49,8 +53,10 @@ class AES256Encryptor implements EncryptorInterface
     }
 
     /**
-     * Implementation of EncryptorInterface decrypt method
+     * Implementation of EncryptorInterface decrypt method.
+     *
      * @param string $data
+     *
      * @return string
      */
     public function decrypt(string $data): string
