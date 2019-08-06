@@ -16,7 +16,7 @@ class OpenSSLCryptorTest extends TestCase
     {
         $this->publicKey = 'foo';
         $this->privateKey = 'bar';
-        $this->iv = 'dTN6Lid8NjVESTdYLVwtVw==';
+        $this->iv = '1234567890123456';
     }
 
     public function testEncryptReturnsDecryptableValueWithSameIv()
