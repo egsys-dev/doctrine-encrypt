@@ -13,28 +13,28 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class QueryAnalyzer implements SQLLogger
 {
     /**
-     * Used database platform
+     * Used database platform.
      *
      * @var AbstractPlatform
      */
     protected $platform;
 
     /**
-     * Start time of currently executed query
+     * Start time of currently executed query.
      *
-     * @var integer
+     * @var int
      */
     private $queryStartTime = null;
 
     /**
-     * Total execution time of all queries
+     * Total execution time of all queries.
      *
-     * @var integer
+     * @var int
      */
     private $totalExecutionTime = 0;
 
     /**
-     * List of queries executed
+     * List of queries executed.
      *
      * @var array
      */
@@ -42,7 +42,7 @@ class QueryAnalyzer implements SQLLogger
 
     /**
      * Query execution times indexed
-     * in same order as queries
+     * in same order as queries.
      *
      * @var array
      */
@@ -51,7 +51,7 @@ class QueryAnalyzer implements SQLLogger
     /**
      * Initialize log listener with database
      * platform, which is needed for parameter
-     * conversion
+     * conversion.
      *
      * @param AbstractPlatform $platform
      */
@@ -80,7 +80,7 @@ class QueryAnalyzer implements SQLLogger
     }
 
     /**
-     * Clean all collected data
+     * Clean all collected data.
      *
      * @return QueryAnalyzer
      */
@@ -89,37 +89,40 @@ class QueryAnalyzer implements SQLLogger
         $this->queries = array();
         $this->queryExecutionTimes = array();
         $this->totalExecutionTime = 0;
+
         return $this;
     }
 
     /**
-     * Dump the statistics of executed queries
+     * Dump the statistics of executed queries.
      *
-     * @param boolean $dumpOnlySql
+     * @param bool $dumpOnlySql
+     *
      * @return string
      */
     public function getOutput($dumpOnlySql = false)
     {
         $output = '';
         if (!$dumpOnlySql) {
-            $output .= 'Platform: ' . $this->platform->getName() . PHP_EOL;
-            $output .= 'Executed queries: ' . count($this->queries);
-            $output .= ', total time: ' . $this->totalExecutionTime . ' ms' . PHP_EOL;
+            $output .= 'Platform: '.$this->platform->getName().PHP_EOL;
+            $output .= 'Executed queries: '.count($this->queries);
+            $output .= ', total time: '.$this->totalExecutionTime.' ms'.PHP_EOL;
         }
         foreach ($this->queries as $index => $sql) {
             if (!$dumpOnlySql) {
-                $output .= 'Query(' . ($index + 1) . ') - ' . $this->queryExecutionTimes[$index] . ' ms' . PHP_EOL;
+                $output .= 'Query('.($index + 1).') - '.$this->queryExecutionTimes[$index].' ms'.PHP_EOL;
             }
-            $output .= $sql . ';' . PHP_EOL;
+            $output .= $sql.';'.PHP_EOL;
         }
         $output .= PHP_EOL;
+
         return $output;
     }
 
     /**
-     * Index of the slowest query executed
+     * Index of the slowest query executed.
      *
-     * @return integer
+     * @return int
      */
     public function getSlowestQueryIndex()
     {
@@ -131,13 +134,14 @@ class QueryAnalyzer implements SQLLogger
                 $index = $i;
             }
         }
+
         return $index;
     }
 
     /**
-     * Get total execution time of queries
+     * Get total execution time of queries.
      *
-     * @return integer
+     * @return int
      */
     public function getTotalExecutionTime()
     {
@@ -145,7 +149,7 @@ class QueryAnalyzer implements SQLLogger
     }
 
     /**
-     * Get all queries
+     * Get all queries.
      *
      * @return array
      */
@@ -155,9 +159,9 @@ class QueryAnalyzer implements SQLLogger
     }
 
     /**
-     * Get number of executed queries
+     * Get number of executed queries.
      *
-     * @return integer
+     * @return int
      */
     public function getNumExecutedQueries()
     {
@@ -165,7 +169,7 @@ class QueryAnalyzer implements SQLLogger
     }
 
     /**
-     * Get all query execution times
+     * Get all query execution times.
      *
      * @return array
      */
@@ -175,11 +179,12 @@ class QueryAnalyzer implements SQLLogger
     }
 
     /**
-     * Create the SQL with mapped parameters
+     * Create the SQL with mapped parameters.
      *
      * @param string $sql
-     * @param array $params
-     * @param array $types
+     * @param array  $params
+     * @param array  $types
+     *
      * @return string sql
      */
     private function generateSql($sql, $params, $types)
@@ -195,17 +200,19 @@ class QueryAnalyzer implements SQLLogger
             }, $sql);
         } else {
             foreach ($converted as $key => $value) {
-                $sql = str_replace(':' . $key, $value, $sql);
+                $sql = str_replace(':'.$key, $value, $sql);
             }
         }
+
         return $sql;
     }
 
     /**
-     * Get the converted parameter list
+     * Get the converted parameter list.
      *
      * @param array $params
      * @param array $types
+     *
      * @return array
      */
     private function getConvertedParams($params, $types)
@@ -235,6 +242,7 @@ class QueryAnalyzer implements SQLLogger
             }
             $result[$position] = $value;
         }
+
         return $result;
     }
 }
