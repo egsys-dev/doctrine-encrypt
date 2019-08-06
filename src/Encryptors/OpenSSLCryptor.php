@@ -52,10 +52,10 @@ class OpenSSLCryptor implements EncryptorInterface
 
     public function decrypt(string $data): string
     {
-        $c = base64_decode($data);
+        $decodedData = base64_decode($data);
         $ivlen = openssl_cipher_iv_length($this->cipher);
-        $hmac = substr($c, $ivlen, $sha2len = 32);
-        $ciphertextRaw = substr($c, $ivlen + $sha2len);
+        $hmac = substr($decodedData, $ivlen, $sha2len = 32);
+        $ciphertextRaw = substr($decodedData, $ivlen + $sha2len);
 
         $originalPlaintext = openssl_decrypt($ciphertextRaw, $this->cipher, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
         $calcmac = hash_hmac($this->hmacHash, $ciphertextRaw, $this->publicKey, true);
