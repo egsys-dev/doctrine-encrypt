@@ -47,7 +47,7 @@ class OpenSSLCryptor implements EncryptorInterface
         $hmac = hash_hmac($this->hmacHash, $ciphertextRaw, $this->publicKey, true);
         $encrypted = base64_encode($this->iv.$hmac.$ciphertextRaw);
 
-        return $encrypted ? $encrypted : "";
+        return $encrypted ? $encrypted : '';
     }
 
     public function decrypt(string $data): ?string
@@ -64,6 +64,6 @@ class OpenSSLCryptor implements EncryptorInterface
             throw new HmacCalculationException('Não foi possivel descriptografar o valor informado');
         }
 
-        return $originalPlaintext ? $originalPlaintext : "";
+        return $originalPlaintext ? $originalPlaintext : '';
     }
 }

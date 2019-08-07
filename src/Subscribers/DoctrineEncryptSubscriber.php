@@ -226,7 +226,7 @@ class DoctrineEncryptSubscriber implements EventSubscriber
 
             try {
                 $value = $this->encryptor->decrypt($value);
-            } catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 $value = $this->encryptor->encrypt($value);
             }
 
