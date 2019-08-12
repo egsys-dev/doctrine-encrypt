@@ -224,9 +224,11 @@ class DoctrineEncryptSubscriber implements EventSubscriber
         foreach ($properties as $refProperty) {
             $value = $refProperty->getValue($entity);
 
-            $value = $isEncryptOperation ?
-                $this->encryptor->encrypt($value) :
-                $this->encryptor->decrypt($value);
+            try {
+                $value = $this->encryptor->decrypt($value);
+            } catch (\Exception $exception) {
+                $value = $this->encryptor->encrypt($value);
+            }
 
             $refProperty->setValue($entity, $value);
 
