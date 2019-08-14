@@ -16,10 +16,21 @@ distinguishes itself with the following features:
 
 Tests currently run with PHP 7.1, 7.2
 
-## Installation
-Execute follow command:
+## Instalação
+
+Adicionar no compose.json:
+
 ```
-composer require egsys-dev/doctrine-encrypt
+"repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:egsys-dev/doctrine-encrypt.git"
+        }
+]
+```
+
+```
+composer require egsys-dev/doctrine-encrypt:dev-master
 ```
 
 
