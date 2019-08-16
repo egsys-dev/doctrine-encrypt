@@ -227,6 +227,10 @@ class DoctrineEncryptSubscriber implements EventSubscriber
             if ($value) {
                 try {
                     $value = $this->encryptor->decrypt($value);
+                    if($isEncryptOperation)
+                    {
+                        $value = $this->encryptor->encrypt($value);
+                    }
                 } catch (\Exception $exception) {
                     if ($isEncryptOperation) {
                         $value = $this->encryptor->encrypt($value);
