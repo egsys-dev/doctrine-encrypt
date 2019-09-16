@@ -60,6 +60,11 @@ class OpenSSLCryptor implements EncryptorInterface
         $originalPlaintext = openssl_decrypt($ciphertextRaw, $this->cipher, $this->privateKey, OPENSSL_RAW_DATA, $this->iv);
         $calcmac = hash_hmac($this->hmacHash, $ciphertextRaw, $this->publicKey, true);
 
+        if (is_bool($hmac))
+        {
+            return $originalPlaintext ? $originalPlaintext : '';
+        }
+
         if (!hash_equals($hmac, $calcmac)) {
             throw new HmacCalculationException('Não foi possivel descriptografar o valor informado');
         }
